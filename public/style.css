@@ -1,0 +1,47 @@
+body {
+  font: 14px Georgia, serif;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6, p, ul, ol, pre {
+  margin-bottom: 18px;
+}
+
+h1 {
+  font-size: 24px;
+  line-height: 28px;
+}
+
+pre, code {
+  background: #eee;
+}
+
+code {
+  padding: 1px 3px;
+  font: 12px Monaco, monospace;
+}
+
+pre code {
+  padding: 0;
+}
+
+pre {
+  padding: 10px;
+  line-height: 1.2;
+}
+
+#wrapper {
+  width: 720px;
+  margin: 0 auto;
+  padding: 20px 0 40px;
+}
+
+#content {
+  border-bottom: 1px solid black;
+}
+
+#footer {
+  margin-top: 10px;
+  font-size: 10px;
+  text-align: right;
+}
