@@ -10,6 +10,7 @@ a:link, a:visited {
 
 ol {
   margin-left: 20px;
+  margin-bottom: 20px;
   list-style-type: decimal;
 }
 
