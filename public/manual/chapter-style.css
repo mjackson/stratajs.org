@@ -3,6 +3,10 @@ body {
   line-height: 1.5;
 }
 
+a:link, a:visited {
+  color: #0000ab;
+}
+
 h1, h2, h3, h4, h5, h6, p, ul, ol, pre {
   margin-bottom: 18px;
 }
@@ -30,18 +34,23 @@ pre {
   line-height: 1.2;
 }
 
-#wrapper {
-  width: 720px;
-  margin: 0 auto;
-  padding: 20px 0 40px;
+ol {
+  list-style-type: decimal;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol, ul {
+  margin-left: 40px;
 }
 
 #content {
-  border-bottom: 1px solid black;
+  position: relative;
+  margin: 20px 20px 80px;
 }
 
-#footer {
-  margin-top: 10px;
-  font-size: 10px;
-  text-align: right;
+a.edit {
+  float: right;
 }

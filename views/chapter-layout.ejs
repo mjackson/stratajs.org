@@ -2,13 +2,10 @@
 
 <html>
     <head>
-        <% if (title) { %>
-            <title>Strata &raquo; <%= title %></title>
-        <% } else { %>
-            <title>Strata Web Framework</title>
-        <% } %>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Strata Manual &raquo; <%= title %></title>
         <link rel="stylesheet" type="text/css" href="/reset.css">
-        <link rel="stylesheet" type="text/css" href="/style.css">
+        <link rel="stylesheet" type="text/css" href="/manual/chapter-style.css">
         <link rel="stylesheet" type="text/css" href="/sh_emacs.css">
         <script type="text/javascript" src="/sh_main.min.js"></script>
         <script type="text/javascript" src="/sh_javascript.min.js"></script>
@@ -24,13 +21,10 @@
         </script>
     </head>
     <body>
-        <div id="wrapper">
-            <div id="content">
-                <%- content %>
-            </div>
-            <div id="footer">
-                <p id="copyright">Copyright &copy; 2011 Michael Jackson</p>
-            </div>
+        <div id="content">
+            <a class="edit" title="Edit this page" target="_blank" href="<%- editUrl %>">Edit</a>
+            <%- content %>
+            <a class="edit" title="Edit this page" target="_blank" href="<%- editUrl %>">Edit</a>
         </div>
     </body>
 </html>

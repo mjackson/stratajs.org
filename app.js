@@ -8,37 +8,60 @@ function notFound(env, callback) {
     callback(404, {"Content-Type": "text/plain"}, "Not found!");
 }
 
-var layout = fs.readFileSync(path.resolve(__dirname, "layout.ejs"), "utf8");
-var render = function (content, locals) {
+function view(filename) {
+    return fs.readFileSync(path.resolve(__dirname, "views", filename), "utf8");
+}
+
+function render(layout, locals) {
     locals = locals || {};
-    locals.title = locals.title;
-    locals.content = content;
     return ejs.render(layout, {locals: locals});
 }
+
+var indexLayout = view("index-layout.ejs");
+var chapterLayout = view("chapter-layout.ejs");
 
 var app = new strata.Builder;
 
 app.use(strata.commonLogger);
-// app.use(strata.gzip);
+app.use(strata.gzip);
 app.use(strata.contentLength);
 app.use(strata.contentType, "text/html");
-app.use(strata.static, path.resolve(__dirname, "public"));
+app.use(strata.rewrite, "/manual", "/manual.html");
+app.use(strata.static, path.resolve(__dirname, "public"), "index.html");
 
-app.route("/examples/:number", function (env, callback) {
-    var route = env["strata.route"];
-    var example = strata.examples[route.number];
+app.get("/manual/chapters", function (env, callback) {
+    var chapters = [];
 
-    if (example) {
-        var text = "# " + example.name + "\n" + example.text;
-        var title = example.name + " Example";
-        callback(200, {}, render(markdown.parse(text), {title: title}));
+    for (var prop in strata.manual) {
+        if ((/^\d+$/).test(prop)) {
+            chapters.push(["/manual/" + prop, strata.manual[prop].title]);
+        }
+    }
+
+    chapters.sort();
+
+    var content = render(indexLayout, {
+        chapters: chapters
+    });
+
+    callback(200, {}, content);
+});
+
+app.get("/manual/:number", function (env, callback) {
+    var chapter = strata.manual[env.route.number];
+    var editBase = "https://github.com/mjijackson/strata/edit/master/doc/";
+
+    if (chapter) {
+        var content = render(chapterLayout, {
+            title: chapter.title,
+            content: markdown.parse(chapter.text),
+            editUrl: editBase + path.basename(chapter.file)
+        });
+
+        callback(200, {}, content);
     } else {
         notFound(env, callback);
     }
-});
-
-app.run(function (env, callback) {
-    callback(200, {}, "Welcome to Strata!")
 });
 
 module.exports = app;

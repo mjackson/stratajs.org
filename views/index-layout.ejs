@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Strata Manual Chapter Index</title>
+        <link rel="stylesheet" type="text/css" href="/reset.css">
+        <link rel="stylesheet" type="text/css" href="/manual/index-style.css">
+    </head>
+    <body>
+        <h1>Chapters</h1>
+        <ol>
+            <% for (var i = 0; i < chapters.length; ++i) { %>
+            <li><a href="<%= chapters[i][0] %>" target="content"><%= chapters[i][1] %></a></li>
+            <% } %>
+        </ol>
+    </body>
+</html>
