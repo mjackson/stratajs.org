@@ -5,12 +5,21 @@ body {
 
 #wrapper {
   width: 340px;
-  margin: 15% auto 0;
+  margin: 15% auto;
+}
+
+/* iPad [portrait + landscape] */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+}
+
+/* iPhone [portrait + landscape] */
+@media only screen and (max-device-width: 480px) {
+  #wrapper {
+    margin: 15px auto;
+  }
 }
 
 #title {
-  width: 340px;
-  margin: 0 auto;
   text-align: center;
   border-bottom: 1px solid black;
 }

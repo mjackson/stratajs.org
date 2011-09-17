@@ -49,9 +49,10 @@ app.get("/manual/chapter-index", function (env, callback) {
 
 app.get("/manual/:number", function (env, callback) {
     var chapter = strata.manual[env.route.number];
-    var editBase = "https://github.com/mjijackson/strata/edit/master/doc/";
 
     if (chapter) {
+        var editBase = "https://github.com/mjijackson/strata/edit/master/doc/";
+
         var content = render(chapterLayout, {
             title: chapter.title,
             content: markdown.parse(chapter.text),
