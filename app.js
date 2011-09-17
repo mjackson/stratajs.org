@@ -17,10 +17,10 @@ function render(layout, locals) {
     return ejs.render(layout, {locals: locals});
 }
 
-var indexLayout = view("index-layout.ejs");
-var chapterLayout = view("chapter-layout.ejs");
+var indexLayout = view("chapter-index.ejs");
+var chapterLayout = view("chapter.ejs");
 
-var app = new strata.Builder;
+var app = new strata.Builder(notFound);
 
 app.use(strata.commonLogger);
 app.use(strata.gzip);
@@ -29,7 +29,7 @@ app.use(strata.contentType, "text/html");
 app.use(strata.rewrite, "/manual", "/manual.html");
 app.use(strata.static, path.resolve(__dirname, "public"), "index.html");
 
-app.get("/manual/chapters", function (env, callback) {
+app.get("/manual/chapter-index", function (env, callback) {
     var chapters = [];
 
     for (var prop in strata.manual) {
