@@ -8,8 +8,7 @@
         "node": "~0.4.7"
     },
     "dependencies": {
-        "strata": "~0.5.1",
-        "markdown": "0.2.1",
+        "strata": "~0.5.2",
         "ejs": "0.4.3"
     },
     "private": true
