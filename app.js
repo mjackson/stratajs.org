@@ -51,11 +51,18 @@ app.get("/manual/:number", function (env, callback) {
     var chapter = strata.manual[env.route.number];
 
     if (chapter) {
+        var content = markdown.parse(chapter.text);
+
+        // Repair broken links whose href ends with a ")" (markdown parsing error)
+        content = content.replace(/(<a.*?href=".*?)\)(".*?>.*?<\/a>)/g, "$1$2)");
+        // Make all links open in a new tab
+        content = content.replace(/<a href=/g, '<a target="_blank" href=');
+
         var editBase = "https://github.com/mjijackson/strata/edit/master/doc/";
 
         var content = render(chapterLayout, {
             title: chapter.title,
-            content: markdown.parse(chapter.text),
+            content: content,
             editUrl: editBase + path.basename(chapter.file)
         });
 
