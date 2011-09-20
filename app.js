@@ -31,13 +31,9 @@ app.use(strata.static, path.resolve(__dirname, "public"), "index.html");
 app.get("/manual/chapter-index", function (env, callback) {
     var chapters = [];
 
-    for (var prop in strata.manual) {
-        if ((/^\d+$/).test(prop)) {
-            chapters.push(["/manual/" + prop, strata.manual[prop].title]);
-        }
-    }
-
-    chapters.sort();
+    strata.manual.forEach(function (chapter, index) {
+        chapters.push(["/manual/" + index, chapter.title]);
+    });
 
     var content = render(indexLayout, {
         chapters: chapters
@@ -46,8 +42,9 @@ app.get("/manual/chapter-index", function (env, callback) {
     callback(200, {}, content);
 });
 
-app.get("/manual/:number", function (env, callback) {
-    var chapter = strata.manual[env.route.number];
+app.get("/manual/:index", function (env, callback) {
+    var index = parseInt(env.route.index) || 0;
+    var chapter = strata.manual[index];
 
     if (chapter) {
         var content = chapter.html;
