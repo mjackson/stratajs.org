@@ -8,7 +8,7 @@
         "node": "~0.4.7"
     },
     "dependencies": {
-        "strata": "https://github.com/mjijackson/strata/tarball/master",
+        "strata": "0.5.10",
         "ejs": "0.4.3"
     },
     "private": true

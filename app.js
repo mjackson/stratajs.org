@@ -28,7 +28,7 @@ app.use(strata.contentType, "text/html");
 app.use(strata.rewrite, "/manual", "/manual.html");
 app.use(strata.static, path.resolve(__dirname, "public"), "index.html");
 
-app.get("/manual/chapter-index", function (env, callback) {
+app.route("/manual/chapter-index", function (env, callback) {
     var chapters = [];
 
     strata.manual.forEach(function (chapter, index) {
@@ -40,11 +40,17 @@ app.get("/manual/chapter-index", function (env, callback) {
     });
 
     callback(200, {}, content);
-});
+}, ["HEAD", "GET"]);
 
-app.get("/manual/:index", function (env, callback) {
+app.route("/manual/:index", function (env, callback) {
     var index = parseInt(env.route.index) || 0;
     var chapter = strata.manual[index];
+    var etag = 'W/"' + strata.version.join(".") + '"';
+
+    if (env.httpIfNoneMatch == etag) {
+        callback(304, {}, "");
+        return;
+    }
 
     if (chapter) {
         var content = chapter.html;
@@ -60,10 +66,10 @@ app.get("/manual/:index", function (env, callback) {
             editUrl: editBase + path.basename(chapter.file)
         });
 
-        callback(200, {}, content);
+        callback(200, {"Etag": etag}, content);
     } else {
         notFound(env, callback);
     }
-});
+}, ["HEAD", "GET"]);
 
 module.exports = app;
