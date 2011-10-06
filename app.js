@@ -1,25 +1,24 @@
 var path = require("path"),
     fs = require("fs"),
     strata = require("strata"),
-    ejs = require("ejs");
+    view = strata.view;
 
 function notFound(env, callback) {
     callback(404, {"Content-Type": "text/plain"}, "Not found!");
 }
 
-function view(filename) {
+function getView(filename) {
     return fs.readFileSync(path.resolve(__dirname, "views", filename), "utf8");
 }
 
 function render(layout, locals) {
-    locals = locals || {};
-    return ejs.render(layout, {locals: locals});
+    return view.render(layout, locals || {});
 }
 
-var indexLayout = view("chapter-index.ejs");
-var chapterLayout = view("chapter.ejs");
+var indexLayout = getView("chapter-index.ejs");
+var chapterLayout = getView("chapter.ejs");
 
-var app = new strata.Builder(notFound);
+var app = new strata.Builder;
 
 app.use(strata.commonLogger);
 app.use(strata.gzip);
@@ -71,5 +70,7 @@ app.route("/manual/:index", function (env, callback) {
         notFound(env, callback);
     }
 }, ["HEAD", "GET"]);
+
+app.run(notFound);
 
 module.exports = app;
