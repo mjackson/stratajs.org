@@ -1,22 +1,23 @@
 var path = require("path"),
     fs = require("fs"),
     strata = require("strata"),
-    view = strata.view;
+    mustache = require("mustache");
 
 function notFound(env, callback) {
     callback(404, {"Content-Type": "text/plain"}, "Not found!");
 }
 
-function getView(filename) {
-    return fs.readFileSync(path.resolve(__dirname, "views", filename), "utf8");
+function getTemplate(filename) {
+    var file = path.resolve(__dirname, "templates", filename + ".mustache");
+    return fs.readFileSync(file, "utf8");
 }
 
-function render(layout, locals) {
-    return view.render(layout, locals || {});
+function render(template, view) {
+    return mustache.to_html(template, view || {});
 }
 
-var indexLayout = getView("chapter-index.ejs");
-var chapterLayout = getView("chapter.ejs");
+var indexLayout = getTemplate("chapter-index");
+var chapterLayout = getTemplate("chapter");
 
 var app = new strata.Builder;
 
@@ -31,7 +32,7 @@ app.route("/manual/chapter-index", function (env, callback) {
     var chapters = [];
 
     strata.manual.forEach(function (chapter, index) {
-        chapters.push(["/manual/" + index, chapter.title]);
+        chapters.push({url: "/manual/" + index, title: chapter.title});
     });
 
     var content = render(indexLayout, {

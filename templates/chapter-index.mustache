@@ -10,9 +10,9 @@
     <body>
         <h1>Chapters</h1>
         <ol>
-            <% for (var i = 0; i < chapters.length; ++i) { %>
-            <li><a href="<%= chapters[i][0] %>" target="content"><%= chapters[i][1] %></a></li>
-            <% } %>
+            {{#chapters}}
+            <li><a href="{{{url}}}" target="content">{{{title}}}</a></li>
+            {{/chapters}}
         </ol>
         <p><a href="https://github.com/mjijackson/strata/tree/master/doc" target="_blank">Contribute</a></p>
     </body>
