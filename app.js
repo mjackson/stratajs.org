@@ -1,11 +1,8 @@
 var path = require("path"),
     fs = require("fs"),
     strata = require("strata"),
-    mustache = require("mustache");
-
-function notFound(env, callback) {
-    callback(404, {"Content-Type": "text/plain"}, "Not found!");
-}
+    mustache = require("mustache"),
+    utils = strata.utils;
 
 function getTemplate(filename) {
     var file = path.resolve(__dirname, "templates", filename + ".mustache");
@@ -20,6 +17,7 @@ var indexLayout = getTemplate("chapter-index");
 var chapterLayout = getTemplate("chapter");
 
 var app = new strata.Builder;
+var router = new strata.Router;
 
 app.use(strata.commonLogger);
 app.use(strata.gzip);
@@ -28,7 +26,7 @@ app.use(strata.contentType, "text/html");
 app.use(strata.rewrite, "/manual", "/manual.html");
 app.use(strata.static, path.resolve(__dirname, "public"), "index.html");
 
-app.route("/manual/chapter-index", function (env, callback) {
+router.get("/manual/chapter-index", function (env, callback) {
     var chapters = [];
 
     strata.manual.forEach(function (chapter, index) {
@@ -40,9 +38,9 @@ app.route("/manual/chapter-index", function (env, callback) {
     });
 
     callback(200, {}, content);
-}, ["HEAD", "GET"]);
+});
 
-app.route("/manual/:index", function (env, callback) {
+router.get("/manual/:index", function (env, callback) {
     var index = parseInt(env.route.index) || 0;
     var chapter = strata.manual[index];
 
@@ -62,10 +60,10 @@ app.route("/manual/:index", function (env, callback) {
 
         callback(200, {}, content);
     } else {
-        notFound(env, callback);
+        utils.notFound(env, callback);
     }
-}, ["HEAD", "GET"]);
+});
 
-app.run(notFound);
+app.run(router);
 
 module.exports = app;
