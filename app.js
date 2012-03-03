@@ -16,17 +16,14 @@ function render(template, view) {
 var indexLayout = getTemplate("chapter-index");
 var chapterLayout = getTemplate("chapter");
 
-var app = new strata.Builder;
-var router = new strata.Router;
+strata.use(strata.commonLogger);
+strata.use(strata.gzip);
+strata.use(strata.contentLength);
+strata.use(strata.contentType, "text/html");
+strata.use(strata.rewrite, "/manual", "/manual.html");
+strata.use(strata.file, path.resolve(__dirname, "public"), "index.html");
 
-app.use(strata.commonLogger);
-app.use(strata.gzip);
-app.use(strata.contentLength);
-app.use(strata.contentType, "text/html");
-app.use(strata.rewrite, "/manual", "/manual.html");
-app.use(strata.static, path.resolve(__dirname, "public"), "index.html");
-
-router.get("/manual/chapter-index", function (env, callback) {
+strata.get("/manual/chapter-index", function (env, callback) {
     var chapters = [];
 
     strata.manual.forEach(function (chapter, index) {
@@ -40,7 +37,7 @@ router.get("/manual/chapter-index", function (env, callback) {
     callback(200, {}, content);
 });
 
-router.get("/manual/:index", function (env, callback) {
+strata.get("/manual/:index", function (env, callback) {
     var index = parseInt(env.route.index) || 0;
     var chapter = strata.manual[index];
 
@@ -64,6 +61,4 @@ router.get("/manual/:index", function (env, callback) {
     }
 });
 
-app.run(router);
-
-module.exports = app;
+module.exports = strata.app;
