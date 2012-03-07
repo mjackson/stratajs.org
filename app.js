@@ -17,7 +17,7 @@ var indexLayout = getTemplate("chapter-index");
 var chapterLayout = getTemplate("chapter");
 
 strata.use(strata.commonLogger);
-strata.use(strata.gzip);
+// strata.use(strata.gzip);
 strata.use(strata.contentLength);
 strata.use(strata.contentType, "text/html");
 strata.use(strata.rewrite, "/manual", "/manual.html");
